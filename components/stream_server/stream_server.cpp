@@ -60,8 +60,8 @@ void StreamServerComponent::cleanup() {
 void StreamServerComponent::read() {
     int len;
     while ((len = this->stream_->available()) > 0) {
-        char buf[128];
-        len = std::min(len, 128);
+        char buf[1024];
+        len = std::min(len, 1024);
 #if ESPHOME_VERSION_CODE >= VERSION_CODE(2021, 10, 0)
         this->stream_->read_array(reinterpret_cast<uint8_t*>(buf), len);
 #else
