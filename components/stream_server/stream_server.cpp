@@ -66,9 +66,11 @@ void StreamServerComponent::read() {
 }
 
 void StreamServerComponent::write() {
-    ESP_LOGD(TAG, "writing data to uart");
-    this->stream_->write_array(this->recv_buf_);
-    this->recv_buf_.clear();
+    if !this->recv_buf_.empty(){
+        ESP_LOGD(TAG, "writing data to uart. len=%lu",this->recv_buf_.size());
+        this->stream_->write_array(this->recv_buf_);
+        this->recv_buf_.clear();
+    }
 }
 
 void StreamServerComponent::dump_config() {
