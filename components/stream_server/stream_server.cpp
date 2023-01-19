@@ -58,7 +58,7 @@ void StreamServerComponent::read() {
     while ((len = this->stream_->available()) > 0) {
         char buf[1024];
         len = std::min(len, 1024);
-        ESP_LOGCONFIG(TAG, "received data from uart %d bytes",len);
+        ESP_LOGD(TAG, "received data from uart %d bytes",len);
         this->stream_->read_array(reinterpret_cast<uint8_t*>(buf), len);
         for (auto const& client : this->clients_)
             client->tcp_client->write(buf, len);
@@ -66,6 +66,7 @@ void StreamServerComponent::read() {
 }
 
 void StreamServerComponent::write() {
+    ESP_LOGD(TAG, "writing data to uart");
     this->stream_->write_array(this->recv_buf_);
     this->recv_buf_.clear();
 }
@@ -84,7 +85,7 @@ void StreamServerComponent::on_shutdown() {
 
 StreamServerComponent::Client::Client(AsyncClient *client, std::vector<uint8_t> &recv_buf) :
         tcp_client{client}, identifier{client->remoteIP().toString().c_str()}, disconnected{false} {
-    ESP_LOGD(TAG, "New client connected from %s", this->identifier.c_str());
+    ESP_LOGD(TAG, "New client (p1) connected from %s", this->identifier.c_str());
 
     this->tcp_client->onError(     [this](void *h, AsyncClient *client, int8_t error)  { this->disconnected = true; });
     this->tcp_client->onDisconnect([this](void *h, AsyncClient *client)                { this->disconnected = true; });
@@ -93,6 +94,7 @@ StreamServerComponent::Client::Client(AsyncClient *client, std::vector<uint8_t> 
     this->tcp_client->onData([&](void *h, AsyncClient *client, void *data, size_t len) {
         if (len == 0 || data == nullptr)
             return;
+        ESP_LOGD(TAG, "received data from tcp %d bytes",len);
 
         auto buf = static_cast<uint8_t *>(data);
         recv_buf.insert(recv_buf.end(), buf, buf + len);
