@@ -66,7 +66,7 @@ void StreamServerComponent::read() {
 }
 
 void StreamServerComponent::write() {
-    if !this->recv_buf_.empty(){
+    if (!this->recv_buf_.empty()){
         ESP_LOGD(TAG, "writing data to uart. len=%lu",this->recv_buf_.size());
         this->stream_->write_array(this->recv_buf_);
         this->recv_buf_.clear();
