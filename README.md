@@ -1,5 +1,9 @@
 Stream server for ESPHome
 =========================
+this is fork of https://github.com/oxan/esphome-stream-server
+forked just for security reasons. 
+
+
 
 Custom component for ESPHome to expose a UART stream over WiFi or Ethernet. Can be used as a serial-to-wifi bridge as
 known from ESPLink or ser2net by using ESPHome.
@@ -14,7 +18,7 @@ Requires ESPHome v1.18.0 or higher.
 
 ```yaml
 external_components:
-  - source: github://oxan/esphome-stream-server
+  - source: github://waowave/esphome-stream-server
 
 stream_server:
 ```
